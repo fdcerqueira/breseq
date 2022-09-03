@@ -317,31 +317,31 @@ if [ "$REFERENCE" = "1" ]
 then
     for i in $input/*.fastq.gz 
     do
-        file=$(basename $i)
+      	file=$(basename $i)
   
-		if [[ $file == "Inv"* ]]
-		then
-			echo "copying $file"
-			cp $i $raw_data
-		else
-		  	echo "copying $file, add prefix Inv_"
-		    cp $i $raw_data/Inv_${file}
-		fi
+	if [[ $file == "Inv"* ]]
+	then
+	    echo "copying $file"
+	    cp $i $raw_data
+	else
+	    echo "copying $file, add prefix Inv_"
+            cp $i $raw_data/Inv_${file}
+	fi
      done
 else 
     for i in $input/*.fastq.gz
     do
-		file=$(basename $i)
+	file=$(basename $i)
 
-	    if [[ $file == "Res"* ]]
-		then
-		    echo "copying $file"
-		    cp $i $raw_data
-		else
-		    echo "copying $file"
-		    cp $i $raw_data/Res_${file}
-		fi
-	done		
+	if [[ $file == "Res"* ]]
+	then
+	     echo "copying $file"
+	     cp $i $raw_data
+	else
+ 	    echo "copying $file"
+	    cp $i $raw_data/Res_${file}
+	fi
+    done		
 fi
 
 #check if file names end with R*_001.fastq.gz
@@ -397,26 +397,26 @@ if [ "$single" = "y" ]
 then
           
     flash=$output/flash
-	mkdir -p $flash
+    mkdir -p $flash
         
     for i in $merged_reads/*_R1_001.fastq.gz
     do
-	    file=$(basename $i)	
-		f2=${file%%_R1_001.fastq.gz}_R2_001.fastq.gz
+	file=$(basename $i)	
+	f2=${file%%_R1_001.fastq.gz}_R2_001.fastq.gz
         prefix=${file%%.fastq.gz}
 		
-		flash $merged_reads/${file} $merged_reads/${f2} \
-		--max-overlap 100 \
-		--max-mismatch-density 0 \
-		--output-directory $flash \
-		--compress-prog=gzip \
-		--suffix=gz \
-		-t $CORES \
-		-o $prefix		 
+	flash $merged_reads/${file} $merged_reads/${f2} \
+	--max-overlap 100 \
+	--max-mismatch-density 0 \
+	--output-directory $flash \
+	--compress-prog=gzip \
+	--suffix=gz \
+	-t $CORES \
+	-o $prefix		 
     done
         
         #merge flash output for breseq(joined or not)
-	for i in $(find $flash -type f -name "*.fastq.gz" \
+    for i in $(find $flash -type f -name "*.fastq.gz" \
     | while read F; do basename $F \
     | rev \
     | cut -c 22- \
@@ -425,7 +425,7 @@ then
     | uniq)
     do
                 
-        file=${i%%.[en]*}
+     	file=${i%%.[en]*}
         echo "Merging FLASH ${file} "
         cat $flash/${file}*.fastq.gz > $processed_fastq/${file}_R1_001.fastq.gz	
 	done
